@@ -69,6 +69,8 @@ We provide the trained weight file so you can just run with that. You can also u
 
 ```shell
 cd tools 
+python test.py --cfg_file ${CONFIG_FILE} --batch_size ${BATCH_SIZE} --ckpt ${CKPT}
+``` ignore below commands ```
 bash scripts/dist_test.sh NUM_GPUS --cfg_file PATH_TO_CONFIG_FILE --ckpt PATH_TO_MODEL
 #For example,
 bash scripts/dist_test.sh 8 --cfg_file PATH_TO_CONFIG_FILE --ckpt PATH_TO_MODEL
