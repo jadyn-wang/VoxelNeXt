@@ -57,16 +57,24 @@ class CustomDataset(DatasetTemplate):
         gt_names = []
         for line in lines:
             line_list = line.strip().split(' ')
-            gt_boxes.append(line_list[:-1])
-            gt_names.append(line_list[-1])
+            if len(line_list) != 8:
+                print(f'Error in line format: {line}')
+            else:
+                gt_boxes.append(line_list[:-1])
+                gt_names.append(line_list[-1])
+            break
 
         return np.array(gt_boxes, dtype=np.float32), np.array(gt_names)
 
     def get_lidar(self, idx):
         lidar_file = self.root_path / 'points' / ('%s.npy' % idx)
         assert lidar_file.exists()
-        point_features = np.load(lidar_file)
-        return point_features
+        try:
+            point_features = np.load(lidar_file)
+            return point_features
+        except Exception as e:
+            print(f"Error loading sample {idx}: {e}")
+            raise e
 
     def set_split(self, split):
         super().__init__(
@@ -277,7 +285,7 @@ if __name__ == '__main__':
         ROOT_DIR = (Path(__file__).resolve().parent / '../../../').resolve()
         create_custom_infos(
             dataset_cfg=dataset_cfg,
-            class_names=['Vehicle', 'Pedestrian', 'Cyclist'],
+            class_names=['pipe'],
             data_path=ROOT_DIR / 'data' / 'custom',
             save_path=ROOT_DIR / 'data' / 'custom',
         )
